@@ -16,24 +16,53 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     @Configuration
+    @Order(1)
     public static class App2ConfigurationAdapter {
         @Bean
         SecurityFilterChain lawyerFilterChain(HttpSecurity http) throws Exception {
             http
                     .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                            .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
+                            .requestMatchers(new AntPathRequestMatcher("/lawyer/**")).permitAll().anyRequest().authenticated())
                     .csrf((csrf) -> csrf.disable())
                     .headers((headers) -> headers
                             .addHeaderWriter(new XFrameOptionsHeaderWriter(
                                     XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
                     .formLogin((formLogin) -> formLogin
                             .loginPage("/lawyer/login")
-                            .usernameParameter("name")
-                            .passwordParameter("password")
+                            .loginProcessingUrl("/lawyer/login")
+                            .usernameParameter("lawyerLoginId")
+                            .passwordParameter("lawyerPassword")
                             .successHandler(new CustomSimpleUrlAuthenticationSuccessHandler())
                             .failureHandler(new CustomSimpleUrlAuthenticationFailureHandler()))
                     .logout((logout) -> logout
                             .logoutRequestMatcher(new AntPathRequestMatcher("/lawyer/logout"))
+                            .logoutSuccessUrl("/")
+                            .invalidateHttpSession(true))
+            ;
+            return http.build();
+        }
+    }
+    @Configuration
+    @Order(2)
+    public static class App1ConfigurationAdapter {
+        @Bean
+        SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
+            http
+                    .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
+                            .requestMatchers(new AntPathRequestMatcher("/user/**")).permitAll().anyRequest().authenticated())
+                    .csrf((csrf) -> csrf.disable())
+                    .headers((headers) -> headers
+                            .addHeaderWriter(new XFrameOptionsHeaderWriter(
+                                    XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN)))
+                    .formLogin((formLogin) -> formLogin
+                            .loginPage("/user/login")
+                            .loginProcessingUrl("/user/login")
+                            .usernameParameter("userLoginId")
+                            .passwordParameter("userPassword")
+                            .successHandler(new CustomSimpleUrlAuthenticationSuccessHandler())
+                            .failureHandler(new CustomSimpleUrlAuthenticationFailureHandler()))
+                    .logout((logout) -> logout
+                            .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                             .logoutSuccessUrl("/")
                             .invalidateHttpSession(true))
             ;

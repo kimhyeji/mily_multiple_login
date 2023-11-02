@@ -19,7 +19,7 @@
                 <label class="label">
                     <span class="label-text">아이디</span>
                 </label>
-                <input type="text" name="name" placeholder="아이디" class="input input-bordered" autofocus
+                <input type="text" name="lawyerLoginId" placeholder="아이디" class="input input-bordered" autofocus
                        maxlength="30">
             </div>
 
@@ -27,7 +27,7 @@
                 <label class="label">
                     <span class="label-text">비밀번호</span>
                 </label>
-                <input type="password" name="password" placeholder="비밀번호" class="input input-bordered" maxlength="50">
+                <input type="password" name="lawyerPassword" placeholder="비밀번호" class="input input-bordered" maxlength="50">
             </div>
 
             <div>
@@ -49,28 +49,28 @@
             function submitLoginForm(form) {
                 if ( submitLoginFormDone ) return;
 
-                form.name.value = form.name.value.trim();
+                form.lawyerLoginId.value = form.lawyerLoginId.value.trim();
 
-                if ( form.name.value.length == 0 ) {
-                    form.name.focus();
+                if ( form.lawyerLoginId.value.length == 0 ) {
+                    form.lawyerLoginId.focus();
                     toastWarning('아이디 입력 란을 확인해주세요.');
                     return;
                 }
-                if ( form.name.value.length < 8 ) {
-                    form.name.focus();
+                if ( form.lawyerLoginId.value.length < 8 ) {
+                    form.lawyerLoginId.focus();
                     toastWarning('아이디는 최소 8글자 이상입니다.');
                     return;
                 }
 
-                form.password.value = form.password.value.trim();
+                form.lawyerPassword.value = form.lawyerPassword.value.trim();
 
-                if ( form.password.value.length == 0 ) {
-                    form.password.focus();
+                if ( form.lawyerPassword.value.length == 0 ) {
+                    form.lawyerPassword.focus();
                     toastWarning('비밀번호 입력 란을 확인해주세요.');
                     return;
                 }
-                if ( form.password.value.length < 8 ) {
-                    form.password.focus();
+                if ( form.lawyerPassword.value.length < 8 ) {
+                    form.lawyerPassword.focus();
                     toastWarning('비밀번호는 최소 8글자 이상입니다.');
                     return;
                 }
