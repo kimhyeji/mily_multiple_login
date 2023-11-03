@@ -28,7 +28,7 @@
 //        SecurityFilterChain lawyerFilterChain(HttpSecurity http) throws Exception {
 //            http
 //                    .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-//                            .requestMatchers(new AntPathRequestMatcher("/**")).permitAll().anyRequest().authenticated())
+//                            .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
 //                    .csrf((csrf) -> csrf.disable())
 //                    .headers((headers) -> headers
 //                            .addHeaderWriter(new XFrameOptionsHeaderWriter(
@@ -55,7 +55,7 @@
 //        SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
 //            http
 //                    .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-//                            .requestMatchers(new AntPathRequestMatcher("/**")).permitAll().anyRequest().authenticated())
+//                            .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
 //                    .csrf((csrf) -> csrf.disable())
 //                    .headers((headers) -> headers
 //                            .addHeaderWriter(new XFrameOptionsHeaderWriter(

@@ -1,12 +1,18 @@
 package com.mily.security;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -22,7 +28,7 @@ public class SecurityConfig {
         SecurityFilterChain lawyerFilterChain(HttpSecurity http) throws Exception {
             http
                     .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                            .requestMatchers(new AntPathRequestMatcher("/lawyer/**")).permitAll().anyRequest().authenticated())
+                            .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
                     .csrf((csrf) -> csrf.disable())
                     .headers((headers) -> headers
                             .addHeaderWriter(new XFrameOptionsHeaderWriter(
@@ -49,7 +55,7 @@ public class SecurityConfig {
         SecurityFilterChain userFilterChain(HttpSecurity http) throws Exception {
             http
                     .authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                            .requestMatchers(new AntPathRequestMatcher("/user/**")).permitAll().anyRequest().authenticated())
+                            .requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
                     .csrf((csrf) -> csrf.disable())
                     .headers((headers) -> headers
                             .addHeaderWriter(new XFrameOptionsHeaderWriter(
@@ -70,10 +76,24 @@ public class SecurityConfig {
         }
     }
 
-
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+        var userDetailsService = new InMemoryUserDetailsManager();
+        userDetailsService.createUser(User.builder()
+                .username("user")
+                .password(passwordEncoder.encode("userPassword"))
+                .roles("USER")
+                .build());
+        userDetailsService.createUser(User.builder()
+                .username("lawyer")
+                .password(passwordEncoder.encode("lawyerPassword"))
+                .roles("LAWYER")
+                .build());
+        return userDetailsService;
+    }
 
     @Bean
-    PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

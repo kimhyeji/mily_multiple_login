@@ -27,7 +27,7 @@ public class MilyUserController {
 
     @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
-    public String showLogin22() {
+    public String showLogin() {
         System.out.println("dddd");
         return "mily/milyuser/login_form";
     }
